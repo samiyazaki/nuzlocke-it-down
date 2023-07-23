@@ -1,57 +1,68 @@
-function refreshTeam() {
-    fetch('/get_team')  // replace with your actual API endpoint
-    .then(response => response.json())
-    .then(data => {
-        let table = document.getElementById('team');
-        table.innerHTML = '';  // clear the table
-        // add a new row for each Pokemon
-        data.forEach(pokemon => {
-            let row = table.insertRow();
-            row.insertCell().textContent = pokemon.nickname;
-            row.insertCell().textContent = pokemon.type;
-            row.insertCell().textContent = pokemon.level;
-            row.insertCell().textContent = pokemon.status;
-        });
-    })
-    .catch(error => console.error('Error:', error));
+// Refresh the team display
+async function refreshTeam() {
+    let response = await fetch('/get_team');
+    let team = await response.json();
+    
+    let table = document.getElementById('team');
+    // Clear the table
+    table.innerHTML = '';
+    // Add each Pokemon to the table
+    for (let pokemon of team) {
+        let row = table.insertRow(-1);
+        let cell;
+        // Add each property of the Pokemon as a cell
+        for (let prop of ['nickname', 'type', 'level', 'status']) {
+            cell = row.insertCell(-1);
+            cell.textContent = pokemon[prop];
+        }
+        // If the pokemon has fainted, add a goodbye message
+        if (pokemon.status === "Fainted") {
+            cell = row.insertCell(-1);
+            cell.textContent = `Goodbye, ${pokemon.nickname}...`;
+        }
+    }
 }
 
-function refreshBadges() {
-    fetch('/get_badges')  // replace with your actual API endpoint
-    .then(response => response.json())
-    .then(data => {
-        let list = document.getElementById('badges');
-        list.innerHTML = '';  // clear the list
-        // add a new list item for each badge
-        data.forEach(badge => {
-            let item = document.createElement('li');
-            item.textContent = badge.name;
-            list.appendChild(item);
-        });
-    })
-    .catch(error => console.error('Error:', error));
+// Refresh the badges display
+async function refreshBadges() {
+    let response = await fetch('/get_badges');
+    let badges = await response.json();
+    
+    let ul = document.getElementById('badges');
+    // Clear the ul
+    ul.innerHTML = '';
+    // Add each badge to the ul
+    for (let badge of badges) {
+        let li = document.createElement('li');
+        li.textContent = badge;
+        ul.appendChild(li);
+    }
 }
 
-function addPokemon() {
+// Add a new Pokemon
+async function addPokemon() {
     let nickname = document.getElementById('nickname').value;
     let type = document.getElementById('type').value;
     let level = document.getElementById('level').value;
     let status = document.getElementById('status').value;
-
-    let formData = new FormData();
-    formData.append('nickname', nickname);
-    formData.append('type', type);
-    formData.append('level', level);
-    formData.append('status', status);
-
-    fetch('/add_pokemon', {  // replace with your actual API endpoint
+    
+    let newPokemon = { nickname, type, level, status };
+    
+    let response = await fetch('/add_pokemon', {
         method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-        refreshTeam();  // refresh the team display
-    })
-    .catch(error => console.error('Error:', error));
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newPokemon),
+    });
+    
+    let result = await response.json();
+    
+    if (result.success) {
+        // If the Pokemon was successfully added, refresh the team display
+        refreshTeam();
+    } else {
+        // If there was an error, display an error message (this could be improved)
+        alert('There was an error adding the Pokemon.');
+    }
 }
