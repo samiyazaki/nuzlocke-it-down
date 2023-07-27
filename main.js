@@ -56,13 +56,15 @@ async function addPokemon() {
         body: JSON.stringify(newPokemon),
     });
     
-    let result = await response.json();
+    if (response.status === 200 && response.headers.get('content-type').includes('application/json')) {
+        let result = await response.json();
     
-    if (result.success) {
-        // If the Pokemon was successfully added, refresh the team display
-        refreshTeam();
-    } else {
-        // If there was an error, display an error message (this could be improved)
-        alert('There was an error adding the Pokemon.');
+        if (result.success) {
+            // If the Pokemon was successfully added, refresh the team display
+            refreshTeam();
+        } else {
+            // If there was an error, display an error message (this could be improved)
+            alert('There was an error adding the Pokemon.');
+        }
     }
 }

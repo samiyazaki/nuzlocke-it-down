@@ -1,11 +1,12 @@
 // Require the express module
 const express = require('express');
-
+const path = require('path');
 // Create a new express application
 const app = express();
 
 // Include this line if you're going to receive JSON
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '.')));
 
 // The team data (replace with your actual data source)
 let team = [{
