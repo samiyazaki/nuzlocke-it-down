@@ -7,6 +7,7 @@
 <body onload="refreshTeam(); refreshBadges();">
     <h1>Pokemon Nuzlocke Tracker</h1>
 
+    <!-- Form to add a new Pokemon -->
     <form onsubmit="event.preventDefault(); addPokemon();">
         <label for="nickname">Nickname:</label><br>
         <input type="text" id="nickname" name="nickname"><br>
@@ -21,21 +22,22 @@
         </select><br>
         <input type="submit" value="Add Pokemon">
     </form>
+
+    <!-- Table to display the team -->
+    <h2>Team:</h2>
+    <table id="team"></table>
+
+    <!-- List to display the badges -->
+    <h2>Badges:</h2>
+    <ul id="badges"></ul>
+
+    <!-- Form to add a new badge -->
     <form onsubmit="event.preventDefault(); addBadge();">
         <label for="badge">Badge:</label><br>
         <input type="text" id="badge" name="badge"><br>
         <input type="submit" value="Add Badge">
     </form>
-    
-    <h2>Team:</h2>
-    <table id="team">
-        <!-- This will be filled dynamically with JavaScript/AJAX -->
-    </table>
 
-    <h2>Badges:</h2>
-    <ul id="badges">
-        <!-- This will be filled dynamically with JavaScript/AJAX -->
-    </ul>
     <script src="main.js"></script>
 </body>
 </html>
