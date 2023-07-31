@@ -68,3 +68,25 @@ async function addPokemon() {
         }
     }
 }
+// Add a new Badge
+async function addBadge() {
+    let badge = document.getElementById('badge').value;
+    
+    let response = await fetch('/add_badge', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ badge }),
+    });
+    
+    let result = await response.json();
+    
+    if (result.success) {
+        // If the badge was successfully added, refresh the badges display
+        refreshBadges();
+    } else {
+        // If there was an error, display an error message
+        alert('There was an error adding the badge.');
+    }
+}

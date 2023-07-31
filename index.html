@@ -21,7 +21,12 @@
         </select><br>
         <input type="submit" value="Add Pokemon">
     </form>
-
+    <form onsubmit="event.preventDefault(); addBadge();">
+        <label for="badge">Badge:</label><br>
+        <input type="text" id="badge" name="badge"><br>
+        <input type="submit" value="Add Badge">
+    </form>
+    
     <h2>Team:</h2>
     <table id="team">
         <!-- This will be filled dynamically with JavaScript/AJAX -->

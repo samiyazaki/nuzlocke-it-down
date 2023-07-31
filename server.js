@@ -39,6 +39,13 @@ app.post('/add_pokemon', (req, res) => {
     res.json({ success: true });
 });
 
+app.post('/add_badge', (req, res) => {
+    let newBadge = req.body.badge;
+    badges.push(newBadge);
+    res.json({ success: true });
+});
+
+
 // Have the app listen on port 3000
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
