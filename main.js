@@ -15,9 +15,9 @@ async function refreshTeam() {
             cell = row.insertCell(-1);
             cell.textContent = pokemon[prop];
         }
-        // Add delete button
+        // Add edit and delete buttons
         cell = row.insertCell(-1);
-        cell.innerHTML = `<button onclick="deletePokemon('${pokemon.nickname}')">Delete</button>`;
+        cell.innerHTML = `<button onclick="editPokemon('${pokemon.nickname}')">Edit</button> <button onclick="deletePokemon('${pokemon.nickname}')">Delete</button>`;
     }
 }
 
@@ -32,10 +32,11 @@ async function refreshBadges() {
     // Add each badge to the ul
     for (let badge of badges) {
         let li = document.createElement('li');
-        li.innerHTML = `${badge} <button onclick="deleteBadge('${badge}')">Delete</button>`;
+        li.innerHTML = `${badge} <button onclick="editBadge('${badge}')">Edit</button> <button onclick="deleteBadge('${badge}')">Delete</button>`;
         ul.appendChild(li);
     }
 }
+
 // Add a new Pokemon
 async function addPokemon() {
     let nickname = document.getElementById('nickname').value;
@@ -90,41 +91,79 @@ async function addBadge() {
 // Delete a Pokemon
 async function deletePokemon(nickname) {
     let response = await fetch('/delete_pokemon', {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ nickname }),
     });
-    
+
     let result = await response.json();
-    
+
     if (result.success) {
-        // If the Pokemon was successfully deleted, refresh the team display
         refreshTeam();
     } else {
-        // If there was an error, display an error message
-        alert('There was an error deleting the Pokemon.');
+        alert('Error deleting Pokemon.');
+    }
+}
+
+// Edit a Pokemon
+async function editPokemon(oldNickname) {
+    let newNickname = prompt("Enter the new nickname:");
+
+    let response = await fetch('/edit_pokemon', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ oldNickname, newNickname }),
+    });
+
+    let result = await response.json();
+
+    if (result.success) {
+        refreshTeam();
+    } else {
+        alert('Error editing Pokemon.');
     }
 }
 
 // Delete a Badge
 async function deleteBadge(badge) {
     let response = await fetch('/delete_badge', {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ badge }),
     });
-    
+
     let result = await response.json();
-    
+
     if (result.success) {
-        // If the badge was successfully deleted, refresh the badges display
         refreshBadges();
     } else {
-        // If there was an error, display an error message
-        alert('There was an error deleting the badge.');
+        alert('Error deleting badge.');
+    }
+}
+
+// Edit a Badge
+async function editBadge(oldBadge) {
+    let newBadge = prompt("Enter the new badge name:");
+
+    let response = await fetch('/edit_badge', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ oldBadge, newBadge }),
+    });
+
+    let result = await response.json();
+
+    if (result.success) {
+        refreshBadges();
+    } else {
+        alert('Error editing badge.');
     }
 }

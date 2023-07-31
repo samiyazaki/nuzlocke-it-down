@@ -20,23 +20,68 @@ app.get('/get_badges', (req, res) => {
 });
 
 app.post('/add_pokemon', (req, res) => {
-    // Same as before...
+    let newPokemon = req.body;
+    team.push(newPokemon);
+    res.json({ success: true });
 });
 
 app.post('/add_badge', (req, res) => {
-    // Same as before...
-});
-
-app.post('/delete_pokemon', (req, res) => {
-    let nickname = req.body.nickname;
-    team = team.filter(pokemon => pokemon.nickname !== nickname);
+    let newBadge = req.body.badge;
+    badges.push(newBadge);
     res.json({ success: true });
 });
 
-app.post('/delete_badge', (req, res) => {
-    let badge = req.body.badge;
-    badges = badges.filter(b => b !== badge);
-    res.json({ success: true });
+
+// Delete a Pokemon
+app.delete('/delete_pokemon', (req, res) => {
+    let { nickname } = req.body;
+    let index = team.findIndex(pokemon => pokemon.nickname === nickname);
+
+    if (index !== -1) {
+        team.splice(index, 1);
+        res.json({ success: true });
+    } else {
+        res.json({ success: false });
+    }
+});
+
+// Edit a Pokemon
+app.put('/edit_pokemon', (req, res) => {
+    let { oldNickname, newNickname } = req.body;
+    let pokemon = team.find(pokemon => pokemon.nickname === oldNickname);
+
+    if (pokemon) {
+        pokemon.nickname = newNickname;
+        res.json({ success: true });
+    } else {
+        res.json({ success: false });
+    }
+});
+
+// Delete a Badge
+app.delete('/delete_badge', (req, res) => {
+    let { badge } = req.body;
+    let index = badges.indexOf(badge);
+
+    if (index !== -1) {
+        badges.splice(index, 1);
+        res.json({ success: true });
+    } else {
+        res.json({ success: false });
+    }
+});
+
+// Edit a Badge
+app.put('/edit_badge', (req, res) => {
+    let { oldBadge, newBadge } = req.body;
+    let index = badges.indexOf(oldBadge);
+
+    if (index !== -1) {
+        badges[index] = newBadge;
+        res.json({ success: true });
+    } else {
+        res.json({ success: false });
+    }
 });
 
 app.listen(3000, () => {

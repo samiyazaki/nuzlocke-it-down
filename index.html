@@ -24,12 +24,30 @@
     </form>
 
     <!-- Table to display the team -->
-    <h2>Team:</h2>
-    <table id="team"></table>
-
+    <h2>Pokemon Tem:</h2>
+    <table id="team">
+        <!-- Your existing table header and rows... -->
+        <!-- In each row -->
+        <tr>
+          <!-- Your existing cells... -->
+          <!-- Delete and Edit buttons -->
+          <td>
+            <button onclick="deletePokemon('Nickname')">Delete</button>
+            <button onclick="editPokemon('Nickname')">Edit</button>
+          </td>
+        </tr>
+      </table>
     <!-- List to display the badges -->
     <h2>Badges:</h2>
-    <ul id="badges"></ul>
+    <ul id="badges">
+        <!-- Your existing list items... -->
+        <!-- In each list item -->
+        <li>
+          Badge name
+          <button onclick="deleteBadge('Badge name')">Delete</button>
+          <button onclick="editBadge('Badge name')">Edit</button>
+        </li>
+      </ul>
 
     <!-- Form to add a new badge -->
     <form onsubmit="event.preventDefault(); addBadge();">
